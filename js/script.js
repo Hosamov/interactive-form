@@ -204,13 +204,6 @@ activitiesBox.addEventListener('change', (event) => {
 function activitiesValidator() {
   const activitiesSectionIsValid = activitiesTotal > 0;
 
-  // if (activitiesSectionIsValid) {
-  //   validationPass(activities);
-  // } else {
-  //   validationFail(activities);
-  // }
-  //
-  // return activitiesSectionIsValid;
   return validator(activitiesSectionIsValid, activitiesBox);
 }
 
@@ -219,13 +212,6 @@ function creditcardValidator() {
   const cardValue = cardNumber.value;
   const cardIsValid = /^\d{13,16}?$/.test(cardValue); //check for a number with 13-16 characters
 
-  // if (cardIsValid) {
-  //   validationPass(cardNumber);
-  // } else {
-  //   validationFail(cardNumber);
-  // }
-  //
-  // return cardIsValid;
   return validator(cardIsValid, cardNumber);
 }
 
@@ -234,13 +220,6 @@ function zipCodeValidator() {
   const zipValue = zipCode.value;
   const zipIsValid = /^\d{5}$/.test(zipValue); //test for 5 numbers
 
-  // if (zipIsValid) {
-  //   validationPass(zipCode);
-  // } else {
-  //   validationFail(zipCode);
-  // }
-  //
-  // return zipIsValid;
   return validator(zipIsValid, zipCode);
 }
 
@@ -249,13 +228,6 @@ function cvvValidator() {
   const cvvValue = cvv.value;
   const cvvIsValid = /^\d{3}$/.test(cvvValue); //test for 3 numbers
 
-  // if (cvvIsValid) {
-  //   validationPass(cvv);
-  // } else {
-  //   validationFail(cvv);
-  // }
-  //
-  // return cvvIsValid;
   return validator(cvvIsValid, cvv);
 
 }
