@@ -121,7 +121,7 @@ paymentSelect.addEventListener('change', (event) => {
       console.log("Error: could not find requested payment method...");
     }
 
-    //Track & set whether 'credit credit' card is current selected payment type
+    //Track & set whether 'credit card' is current selected payment type
     (!paymentMethodsChildren[2].hidden) ? creditCardSelected = true : creditCardSelected = false;
 
   }
@@ -211,6 +211,13 @@ function activitiesValidator() {
 function creditcardValidator() {
   const cardValue = cardNumber.value;
   const cardIsValid = /^\d{13,16}?$/.test(cardValue); //check for a number with 13-16 characters
+
+  if (cardIsValid) {
+    validationPass(cardNumber);
+  } else {
+    validationFail(cardNumber);
+  }
+
   return cardIsValid;
 }
 
@@ -218,16 +225,29 @@ function creditcardValidator() {
 function zipCodeValidator() {
   const zipValue = zipCode.value;
   const zipIsValid = /^\d{5}$/.test(zipValue); //test for 5 numbers
+
+  if (zipIsValid) {
+    validationPass(zipCode);
+  } else {
+    validationFail(zipCode);
+  }
+
   return zipIsValid;
-  console.log(zipIsValid);
 }
 
 //Function to validate required CVV number
 function cvvValidator() {
   const cvvValue = cvv.value;
   const cvvIsValid = /^\d{3}$/.test(cvvValue); //test for 3 numbers
+
+  if (cvvIsValid) {
+    validationPass(cvv);
+  } else {
+    validationFail(cvv);
+  }
+
   return cvvIsValid;
-  console.log(cvvIsValid);
+
 }
 
 // let creditCardRegex = '';
@@ -249,13 +269,12 @@ function cvvValidator() {
 // }
 
 //Real-time validation
-name.addEventListener('keyup', nameValidator);
-
-email.addEventListener('keyup', emailValidator);
-
-activities.addEventListener('keyup', activitiesValidator);
-
-cardNumber.addEventListener('keyup', creditcardValidator);
+name.addEventListener('keyup', nameValidator); //Name field
+email.addEventListener('keyup', emailValidator); //email field
+activities.addEventListener('keyup', activitiesValidator); //activities box
+cardNumber.addEventListener('keyup', creditcardValidator); //card number field
+zipCode.addEventListener('keyup', zipCodeValidator); //zip code field
+cvv.addEventListener('keyup', cvvValidator); //cvv field
 
 // cardNumber.addEventListener("blur", (event) => {
 //   event.target.value = formatCreditCard(event.target.value);
