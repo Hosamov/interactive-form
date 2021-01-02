@@ -3,15 +3,23 @@
 // By: Matt Coale
 
 //Global variables:
-const name = document.querySelector('input[type="text"]'); //Select input type="text" for 'Name' input. **document.getElementById('name');**
-const otherJobRole = document.getElementById('other-job-role');
-const userTitle = document.getElementById('title');
+const form = document.querySelector('form'); //target form element
+const name = document.getElementById('name'); //Select 'Name' input
+const email = document.getElementById('email'); //Select 'email' input
+const otherJobRole = document.getElementById('other-job-role'); //target 'other job role' input element
+const userTitle = document.getElementById('title'); //target 'job role' input element
 const shirtDesign = document.getElementById('design'); //target t-shirt designs
 const shirtColorSelect = document.getElementById('color'); //target t-shirt colors
 const activities = document.getElementById('activities'); //target 'Register for Activities'
 const activitiesCost = document.getElementById('activities-cost'); //target 'Total: $'
+const activitiesBox = document.getElementById('activities-box');
 const paymentMethods = document.querySelector('.payment-methods'); //target 'Payment Info' <fieldset>
 const paymentSelect = document.getElementById('payment'); //target 'Payment Info'
+const cardNumber = document.getElementById('cc-num'); //target 'card number' input element
+const zipCode = document.getElementById('zip'); //Target zip code input element
+const cvv = document.getElementById('cvv'); //target ccv input element
+
+let activitiesTotal = 0; //Track amount of activities selected by user
 
 //Set main focus to 'Name' field upon page load
 name.focus();
@@ -55,17 +63,14 @@ shirtDesign.addEventListener('change', (event) => {
       shirtColorChildren[i].hidden = true;
       shirtColorChildren[i].selected = false;
     }
-    //console.log(eventValue);
-    //console.log(dataTheme);
+
   }
 });
 
 /*
 'Register for Activities' Section
 */
-
-//Initialize variable to hold current $ amount, set to 0
-let totalCost = 0;
+let totalCost = 0; //Initialize variable to hold current $ amount, set to 0
 
 //Event Listener for tracking Activities
 activities.addEventListener('change', (event) => {
@@ -79,8 +84,7 @@ activities.addEventListener('change', (event) => {
     totalCost -= dataCost;
     activitiesCost.innerHTML = ('Total: $' + totalCost);
   }
-  // console.log(totalCost);
-  // console.log('made a change to activities...');
+
 });
 
 
@@ -92,6 +96,8 @@ paymentSelectChildren[1].selected = true; //Select Credit Card by default from d
 
 const paymentMethodsChildren = paymentMethods.children; //target children of paymentMethods variable
 hideController(true, paymentMethodsChildren, 3, 4); //hide 'paypal and 'bitcoin' data from the screen initially
+
+let creditCardSelected = true;
 
 //Event listener for tracking selected payment method
 paymentSelect.addEventListener('change', (event) => {
@@ -115,6 +121,9 @@ paymentSelect.addEventListener('change', (event) => {
       console.log("Error: could not find requested payment method...");
     }
 
+    //Track & set whether 'credit credit' card is current selected payment type
+    (!paymentMethodsChildren[2].hidden) ? creditCardSelected = true : creditCardSelected = false;
+
   }
 
 });
@@ -130,10 +139,169 @@ function hideController(hideState, data, loc1, loc2) {
   return isHidden2;
 }
 
+/*
+Form Validation
+*/
+
+//Handle what to do when validation passes
+function validationPass(element) {
+  element.parentElement.className = 'valid';
+  element.parentElement.classList.remove('not-valid');
+  element.parentElement.lastChild.hidden = true;
+}
+
+//Handle what to do when validation fails
+function validationFail(element) {
+  element.parentElement.className = 'not-valid';
+  element.parentElement.classList.remove('valid');
+  element.parentElement.lastChild.hidden = false;
+}
+
+//Function to validate the name
+function nameValidator() {
+  const nameValue = name.value;
+  const nameIsValid = /^[a-zA-Z]+ ?[a-zA-Z]*? ?[a-zA-Z]*?$/.test(nameValue);
+
+  if (nameIsValid) {
+    validationPass(name);
+  } else {
+    validationFail(name);
+  }
+  return nameIsValid;
+}
+
+//Function to validate the email address
+function emailValidator() {
+  const emailValue = email.value;
+  const emailIsValid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(emailValue);
+
+  if (emailIsValid) {
+    validationPass(email);
+  } else {
+    validationFail(email);
+  }
+  return emailIsValid;
+}
+
+//Listen for change to checkboxes
+activities.addEventListener('change', (event) => {
+  //Verify whether or not a checkbox has been checked,
+  //if so, add 1 to activitiesTotal var; otherwise, subtract 1
+  if (event.target.checked){
+    activitiesTotal++
+  }  else {
+    activitiesTotal--;
+  }
+});
+
+//Function to validate activities
+function activitiesValidator() {
+  const activitiesSectionIsValid = activitiesTotal > 0;
+
+  if (activitiesSectionIsValid) {
+    validationPass(activities);
+  } else {
+    validationFail(activities);
+  }
+
+  return activitiesSectionIsValid;
+}
+
+//Function to validate credit card number criteria
+function creditcardValidator() {
+  const cardValue = cardNumber.value;
+  const cardIsValid = /^\d{13,16}?$/.test(cardValue); //check for a number with 13-16 characters
+  return cardIsValid;
+}
+
+//Function to validate required zip code
+function zipCodeValidator() {
+  const zipValue = zipCode.value;
+  const zipIsValid = /^\d{5}$/.test(zipValue); //test for 5 numbers
+  return zipIsValid;
+  console.log(zipIsValid);
+}
+
+//Function to validate required CVV number
+function cvvValidator() {
+  const cvvValue = cvv.value;
+  const cvvIsValid = /^\d{3}$/.test(cvvValue); //test for 3 numbers
+  return cvvIsValid;
+  console.log(cvvIsValid);
+}
+
+// let creditCardRegex = '';
+//
+// function formatCreditCard(text) {
+//   if(text.length === 13) {
+//     creditCardRegex = /^(\d{4})(\d{4})(\d{5})$/;
+//     return text.replace(creditCardRegex, '$1-$2-$3');
+//   } else if(text.length === 14){
+//       creditCardRegex = /^(\d{4})(\d{6})(\d{4})$/;
+//       return text.replace(creditCardRegex, '$1-$2-$3');
+//   } else if(text.length === 15){
+//       creditCardRegex = /^(\d{4})(\d{6})(\d{5})$/;
+//       return text.replace(creditCardRegex, '$1-$2-$3');
+//   } else if(text.length === 16){
+//       creditCardRegex = /^(\d{4})(\d{4})(\d{4})(\d{4})$/;
+//       return text.replace(creditCardRegex, '$1-$2-$3-$4');
+//   }
+// }
+
+//Real-time validation
+name.addEventListener('keyup', nameValidator);
+
+email.addEventListener('keyup', emailValidator);
+
+activities.addEventListener('keyup', activitiesValidator);
+
+cardNumber.addEventListener('keyup', creditcardValidator);
+
+// cardNumber.addEventListener("blur", (event) => {
+//   event.target.value = formatCreditCard(event.target.value);
+// });
 
 
 
+/*
+Submit Form & validate
+*/
+form.addEventListener('submit', (event) => {
 
+  //event.preventDefault();
+
+  if (!nameValidator()) {
+    console.log('Invalid name prevented submission.');
+    event.preventDefault();
+  }
+
+  if (!emailValidator()) {
+    console.log('Invalid email prevented submission.');
+    event.preventDefault();
+  }
+
+  if (!activitiesValidator()) {
+    console.log('Please select at least one activitity to proceed.');
+    event.preventDefault();
+  }
+  if(creditCardSelected) {
+    if(!creditcardValidator()) {
+      console.log('Please enter a valid credit card number.');
+      event.preventDefault();
+    }
+    if(!zipCodeValidator()) {
+      console.log('Please enter a valid zip code.');
+      event.preventDefault();
+    }
+    if(!cvvValidator()) {
+      console.log('Please enter a valid cvv number.');
+      event.preventDefault();
+    }
+  }
+
+  console.log('Submit handler is functional!');
+
+});
 
 
 
