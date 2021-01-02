@@ -19,7 +19,7 @@ const cardNumber = document.getElementById('cc-num'); //target 'card number' inp
 const zipCode = document.getElementById('zip'); //Target zip code input element
 const cvv = document.getElementById('cvv'); //target ccv input element
 
-let activitiesTotal = 0; //Track amount of activities selected by user
+
 
 //Set main focus to 'Name' field upon page load
 name.focus();
@@ -145,16 +145,29 @@ Form Validation
 
 //Handle what to do when validation passes
 function validationPass(element) {
-  element.parentElement.className = 'valid';
-  element.parentElement.classList.remove('not-valid');
-  element.parentElement.lastChild.hidden = true;
+    element.parentElement.className += ' valid';
+    element.parentElement.classList.remove('not-valid');
+    element.parentElement.lastChild.hidden = true;
+
 }
 
 //Handle what to do when validation fails
 function validationFail(element) {
-  element.parentElement.className = 'not-valid';
-  element.parentElement.classList.remove('valid');
-  element.parentElement.lastChild.hidden = false;
+    element.parentElement.className += ' not-valid';
+    element.parentElement.classList.remove('valid');
+    element.parentElement.lastChild.hidden = false;
+}
+
+function validator(isValid, element) {
+  let inputIsValid = isValid;
+  if (inputIsValid) {
+    validationPass(element);
+    console.log(`input valid`);
+  } else {
+    validationFail(element);
+    console.log(`input not valid`);
+  }
+  return inputIsValid;
 }
 
 //Function to validate the name
@@ -162,12 +175,7 @@ function nameValidator() {
   const nameValue = name.value;
   const nameIsValid = /^[a-zA-Z]+ ?[a-zA-Z]*? ?[a-zA-Z]*?$/.test(nameValue);
 
-  if (nameIsValid) {
-    validationPass(name);
-  } else {
-    validationFail(name);
-  }
-  return nameIsValid;
+  return validator(nameIsValid, name);
 }
 
 //Function to validate the email address
@@ -175,20 +183,18 @@ function emailValidator() {
   const emailValue = email.value;
   const emailIsValid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(emailValue);
 
-  if (emailIsValid) {
-    validationPass(email);
-  } else {
-    validationFail(email);
-  }
-  return emailIsValid;
+  return validator(emailIsValid, email);
 }
 
+
+let activitiesTotal = 0; //Track amount of activities selected by user
+
 //Listen for change to checkboxes
-activities.addEventListener('change', (event) => {
+activitiesBox.addEventListener('change', (event) => {
   //Verify whether or not a checkbox has been checked,
   //if so, add 1 to activitiesTotal var; otherwise, subtract 1
   if (event.target.checked){
-    activitiesTotal++
+    activitiesTotal++;
   }  else {
     activitiesTotal--;
   }
@@ -198,13 +204,14 @@ activities.addEventListener('change', (event) => {
 function activitiesValidator() {
   const activitiesSectionIsValid = activitiesTotal > 0;
 
-  if (activitiesSectionIsValid) {
-    validationPass(activities);
-  } else {
-    validationFail(activities);
-  }
-
-  return activitiesSectionIsValid;
+  // if (activitiesSectionIsValid) {
+  //   validationPass(activities);
+  // } else {
+  //   validationFail(activities);
+  // }
+  //
+  // return activitiesSectionIsValid;
+  return validator(activitiesSectionIsValid, activitiesBox);
 }
 
 //Function to validate credit card number criteria
@@ -212,13 +219,14 @@ function creditcardValidator() {
   const cardValue = cardNumber.value;
   const cardIsValid = /^\d{13,16}?$/.test(cardValue); //check for a number with 13-16 characters
 
-  if (cardIsValid) {
-    validationPass(cardNumber);
-  } else {
-    validationFail(cardNumber);
-  }
-
-  return cardIsValid;
+  // if (cardIsValid) {
+  //   validationPass(cardNumber);
+  // } else {
+  //   validationFail(cardNumber);
+  // }
+  //
+  // return cardIsValid;
+  return validator(cardIsValid, cardNumber);
 }
 
 //Function to validate required zip code
@@ -226,13 +234,14 @@ function zipCodeValidator() {
   const zipValue = zipCode.value;
   const zipIsValid = /^\d{5}$/.test(zipValue); //test for 5 numbers
 
-  if (zipIsValid) {
-    validationPass(zipCode);
-  } else {
-    validationFail(zipCode);
-  }
-
-  return zipIsValid;
+  // if (zipIsValid) {
+  //   validationPass(zipCode);
+  // } else {
+  //   validationFail(zipCode);
+  // }
+  //
+  // return zipIsValid;
+  return validator(zipIsValid, zipCode);
 }
 
 //Function to validate required CVV number
@@ -240,13 +249,14 @@ function cvvValidator() {
   const cvvValue = cvv.value;
   const cvvIsValid = /^\d{3}$/.test(cvvValue); //test for 3 numbers
 
-  if (cvvIsValid) {
-    validationPass(cvv);
-  } else {
-    validationFail(cvv);
-  }
-
-  return cvvIsValid;
+  // if (cvvIsValid) {
+  //   validationPass(cvv);
+  // } else {
+  //   validationFail(cvv);
+  // }
+  //
+  // return cvvIsValid;
+  return validator(cvvIsValid, cvv);
 
 }
 
@@ -303,6 +313,7 @@ form.addEventListener('submit', (event) => {
     console.log('Please select at least one activitity to proceed.');
     event.preventDefault();
   }
+
   if(creditCardSelected) {
     if(!creditcardValidator()) {
       console.log('Please enter a valid credit card number.');
