@@ -13,13 +13,12 @@ const shirtColorSelect = document.getElementById('color'); //target t-shirt colo
 const activities = document.getElementById('activities'); //target 'Register for Activities'
 const activitiesCost = document.getElementById('activities-cost'); //target 'Total: $'
 const activitiesBox = document.getElementById('activities-box');
+
 const paymentMethods = document.querySelector('.payment-methods'); //target 'Payment Info' <fieldset>
 const paymentSelect = document.getElementById('payment'); //target 'Payment Info'
 const cardNumber = document.getElementById('cc-num'); //target 'card number' input element
 const zipCode = document.getElementById('zip'); //Target zip code input element
 const cvv = document.getElementById('cvv'); //target ccv input element
-
-
 
 //Set main focus to 'Name' field upon page load
 name.focus();
@@ -72,7 +71,7 @@ shirtDesign.addEventListener('change', (event) => {
 */
 let totalCost = 0; //Initialize variable to hold current $ amount, set to 0
 
-//Event Listener for tracking Activities
+//Event Listener for tracking activities and calculating the total cost
 activities.addEventListener('change', (event) => {
   const clicked = event.target; //store checkbox input that was just clicked
   const dataCost = parseInt(event.target.getAttribute('data-cost')); //target 'data-cost' attribute inside the change event, convert to integer so we can add it
@@ -87,6 +86,22 @@ activities.addEventListener('change', (event) => {
 
 });
 
+/////////////////////////////////////////WORKING////////////////////////////////////////
+
+[...document.querySelectorAll('input[type="checkbox"]')].forEach(checkbox => { //Followed syntax learned from and used in 'Input Validation Error Indications' project Warm Up.
+  const checkboxParent = checkbox.parentElement;                               //Tried using normal for loop but kept returning an error that 'activityInput.'
+
+  checkbox.addEventListener('focus', (event) => checkboxParent.classList.add('focus'));
+
+  checkbox.addEventListener('blur', (event) => {
+    const active = document.querySelector('.focus');
+    if (active) {
+      active.classList.remove('focus');
+    }
+  });
+});
+
+//////////////////////////////////////////////////////////////////////////////////////////
 
 /*
 'Payment Info' Section
@@ -122,7 +137,7 @@ paymentSelect.addEventListener('change', (event) => {
     }
 
     //Track & set whether 'credit card' is current selected payment type
-    (!paymentMethodsChildren[2].hidden) ? creditCardSelected = true : creditCardSelected = false;
+    (!paymentMethodsChildren[2].hidden) ? creditCardSelected = true: creditCardSelected = false;
 
   }
 
@@ -145,17 +160,17 @@ Form Validation
 
 //Handle what to do when validation passes
 function validationPass(element) {
-    element.parentElement.className += ' valid';
-    element.parentElement.classList.remove('not-valid');
-    element.parentElement.lastChild.hidden = true;
+  element.parentElement.className += ' valid';
+  element.parentElement.classList.remove('not-valid');
+  element.parentElement.lastChild.hidden = true;
 
 }
 
 //Handle what to do when validation fails
 function validationFail(element) {
-    element.parentElement.className += ' not-valid';
-    element.parentElement.classList.remove('valid');
-    element.parentElement.lastChild.hidden = false;
+  element.parentElement.className += ' not-valid';
+  element.parentElement.classList.remove('valid');
+  element.parentElement.lastChild.hidden = false;
 }
 
 function validator(isValid, element) {
@@ -193,11 +208,12 @@ let activitiesTotal = 0; //Track amount of activities selected by user
 activitiesBox.addEventListener('change', (event) => {
   //Verify whether or not a checkbox has been checked,
   //if so, add 1 to activitiesTotal var; otherwise, subtract 1
-  if (event.target.checked){
+  if (event.target.checked) {
     activitiesTotal++;
-  }  else {
+  } else {
     activitiesTotal--;
   }
+
 });
 
 //Function to validate activities
@@ -286,16 +302,16 @@ form.addEventListener('submit', (event) => {
     event.preventDefault();
   }
 
-  if(creditCardSelected) {
-    if(!creditcardValidator()) {
+  if (creditCardSelected) {
+    if (!creditcardValidator()) {
       console.log('Please enter a valid credit card number.');
       event.preventDefault();
     }
-    if(!zipCodeValidator()) {
+    if (!zipCodeValidator()) {
       console.log('Please enter a valid zip code.');
       event.preventDefault();
     }
-    if(!cvvValidator()) {
+    if (!cvvValidator()) {
       console.log('Please enter a valid cvv number.');
       event.preventDefault();
     }
