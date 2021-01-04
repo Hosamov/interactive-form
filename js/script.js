@@ -196,7 +196,8 @@ activitiesBox.addEventListener('change', (event) => {
 
 //Function to validate activities
 function activitiesValidator() {
-  const activitiesValid = activitiesTotal > 0\  return validator(activitiesValid, activitiesBox);
+  const activitiesValid = activitiesTotal > 0;
+  return validator(activitiesValid, activitiesBox);
 }
 
 //Function to validate credit card number criteria
