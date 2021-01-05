@@ -28,6 +28,9 @@ const paymentSelect = document.getElementById('payment'); //target 'Payment Info
 const cardNumber = document.getElementById('cc-num'); //target 'card number' input element
 const zipCode = document.getElementById('zip'); //Target zip code input element
 const cvv = document.getElementById('cvv'); //target ccv input element
+const cc = paymentSelect.children[2];
+const paypal = paymentSelect.children[3];
+const bitcoin = paymentSelect.children[4];
 
 //Global Vars
 let totalCost = 0; //Initialize variable to hold current $ amount, set to 0
@@ -85,7 +88,6 @@ shirtDesign.addEventListener('change', (event) => {
 // 'Register for Activities' Section
 */
 
-
 //Event Listener for tracking activities and calculating the total cost
 activities.addEventListener('change', (event) => {
   const clicked = event.target; //store checkbox input that was clicked/selected by the user
@@ -106,9 +108,9 @@ activities.addEventListener('change', (event) => {
 // 'Payment Info' Section
 */
 const paymentSelectChildren = paymentSelect.children; //target the children of the paymentSelect variable
-paymentSelectChildren[1].selected = true; //Select Credit Card by default from drop-down menu
+creditCardSelected = paymentSelectChildren[1].selected = true; //Select Credit Card by default from drop-down menu
 const paymentMethodsChildren = paymentMethods.children; //Select "Payment info"
-let creditCardSelected = true; //
+
 
 //Function to control data's hidden state
 function paymentHideController(data, showVal, hideVal1, hideVal2) {
@@ -128,15 +130,15 @@ paymentSelect.addEventListener('change', (event) => {
   for (let i = 0; i < paymentMethodsChildren.length; i++) {
     if (eventValue === paymentMethodsChildren[2].className) {
       paymentHideController(paymentMethodsChildren, 2, 3, 4);
+
     } else if (eventValue === paymentMethodsChildren[3].className) {
       paymentHideController(paymentMethodsChildren, 3, 2, 4);
+
     } else if (eventValue === paymentMethodsChildren[4].className) {
       paymentHideController(paymentMethodsChildren, 4, 2, 3);
     }
-
     //Track & set whether 'credit card' is current selected payment type
     (!paymentMethodsChildren[2].hidden) ? creditCardSelected = true: creditCardSelected = false;
-
   }
 
 });
@@ -146,14 +148,14 @@ Form Validation
 */
 //Handle what to do when validation passes
 function validationPass(element) {
-  element.parentElement.className += ' valid';
+  element.parentElement.classList.add('valid');
   element.parentElement.classList.remove('not-valid');
   element.parentElement.lastElementChild.style.display = 'none'; //hide accessibility hint
 }
 
 //Handle what to do when validation fails
 function validationFail(element) {
-  element.parentElement.className += ' not-valid';
+  element.parentElement.classList.add('not-valid');
   element.parentElement.classList.remove('valid');
   element.parentElement.lastElementChild.style.display = 'inline'; //Display accessibility hint to user
 }
@@ -174,14 +176,16 @@ function validator(isValid, element) {
 function nameValidator() {
   const nameValue = name.value;
   const nameIsValid = /^[a-zA-Z]+ ?[a-zA-Z]*? ?[a-zA-Z]*?$/.test(nameValue);
-  return validator(nameIsValid, name);
+  validator(nameIsValid, name);
+  return nameIsValid;
 }
 
 //Function to validate the email address
 function emailValidator() {
   const emailValue = email.value;
   const emailIsValid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(emailValue);
-  return validator(emailIsValid, email);
+  validator(emailIsValid, email);
+  return emailIsValid;
 }
 
 //Listen for change to checkboxes
@@ -197,29 +201,32 @@ activitiesBox.addEventListener('change', (event) => {
 //Function to validate activities
 function activitiesValidator() {
   const activitiesValid = activitiesTotal > 0;
-  return validator(activitiesValid, activitiesBox);
+  validator(activitiesValid, activitiesBox);
+  return activitiesValid;
 }
 
 //Function to validate credit card number criteria
 function creditcardValidator() {
   const cardValue = cardNumber.value;
   const cardIsValid = /^\d{13,16}?$/.test(cardValue); //check for a number with 13-16 characters
-  return validator(cardIsValid, cardNumber);
+  validator(cardIsValid, cardNumber);
+  return cardIsValid;
 }
 
 //Function to validate required zip code
 function zipCodeValidator() {
   const zipValue = zipCode.value;
   const zipIsValid = /^\d{5}$/.test(zipValue); //test for 5 numbers
-  return validator(zipIsValid, zipCode);
+  validator(zipIsValid, zipCode);
+  return zipIsValid;
 }
 
 //Function to validate required CVV number
 function cvvValidator() {
   const cvvValue = cvv.value;
   const cvvIsValid = /^\d{3}$/.test(cvvValue); //test for 3 numbers
-  return validator(cvvIsValid, cvv);
-
+  validator(cvvIsValid, cvv);
+  return cvvIsValid;
 }
 
 //Real-time validation
@@ -227,9 +234,13 @@ function validateAllFields() {
   name.addEventListener('keyup', nameValidator); //Name field
   email.addEventListener('keyup', emailValidator); //email field
   activities.addEventListener('change', activitiesValidator); //activities box
-  cardNumber.addEventListener('keyup', creditcardValidator); //card number field
   zipCode.addEventListener('keyup', zipCodeValidator); //zip code field
   cvv.addEventListener('keyup', cvvValidator); //cvv field
+  if(creditCardSelected){
+    cardNumber.addEventListener('keyup', creditcardValidator); //card number field
+  } else {
+
+  }
 }
 
 /*
@@ -267,6 +278,7 @@ form.addEventListener('submit', (event) => {
       console.log('Please enter a valid cvv number.');
       event.preventDefault();
     }
+
   }
 
   console.log('Submit handler is functional!');
@@ -290,7 +302,5 @@ document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => { //Loop
       inputFocused.classList.remove('focus');
     }
   });
-
-
 
 });
