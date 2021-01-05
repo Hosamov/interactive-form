@@ -4,23 +4,23 @@ Project 3 - Interactive Form in JS
 An interactive form using vanilla JS. The following list is in order of appearance on the screen:
 
 1. Name Input
-The form will start with the focus state on the name <input> element.
+- The form will start with the focus state on the name <input> element.
 The name input must contain a minimum of one alpha character to validate.
 
 2. Email Input
 The email input must follow this format: [min 1 character + @ + min 1 character + . + 3x alpha characters]
 
 3. Job Role Dropdown Menu
-The job role dropdown menu has six options, with the final, "other" option being the last option.
+- The job role dropdown menu has six options, with the final, "other" option being the last option.
 When the "other" option is selected by the user, the "Other Job Role" textbox <input> becomes visible.
 
 4. T-Shirt Info Input Menus
-User may select one of two design themes: 'JS Puns' or 'I <3 JS'
+- User may select one of two design themes: 'JS Puns' or 'I <3 JS'
 'Color' dropdown is disabled by default until one of the above themes are selected.
 'Color' dropdown displays correct color items for the theme selected.
 
 5. Register for Activities
-User may select 1-7 activity checkboxes. The user must select at least one activity to proceed.
+- User may select 1-7 activity checkboxes. The user must select at least one activity to proceed.
 The "Total: $" will update to reflect current price/cost of all activities selected.
 
 6. Payment info
