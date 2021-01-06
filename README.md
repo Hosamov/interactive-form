@@ -36,7 +36,7 @@ The "Total: $" will update to reflect current price/cost of all activities selec
 - 'CVV'
     - Allows 3 numeric characters
 
-The following *(Required) <input> fields are validated (Note: Credit Card, Zip Code, and CVV fields only validated with Credit Card is selected):
+The following *(Required) <input> fields are validated (Note: Credit Card, Zip Code, and CVV fields only validated when Credit Card is selected):
 - name
 - email
 - activities (Register for Activities)
@@ -45,5 +45,8 @@ The following *(Required) <input> fields are validated (Note: Credit Card, Zip C
 - cvv
 
 Live-validation will occur after for submitted. Hints will not show unless the user did not enter valid information in required input fields.
+
+
+Changed CSS colors.
 
 Updated 1/4/2020, by Matt Coale

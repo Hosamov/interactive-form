@@ -21,6 +21,7 @@ const shirtColorSelect = document.getElementById('color'); //target t-shirt colo
 const activities = document.getElementById('activities'); //target 'Register for Activities'
 const activitiesCost = document.getElementById('activities-cost'); //target 'Total: $'
 const activitiesBox = document.getElementById('activities-box');
+const checkboxInput = document.querySelectorAll('input[type="checkbox"]');
 
 //Payment Type Selectors
 const paymentMethods = document.querySelector('.payment-methods'); //target 'Payment Info' <fieldset>
@@ -28,9 +29,6 @@ const paymentSelect = document.getElementById('payment'); //target 'Payment Info
 const cardNumber = document.getElementById('cc-num'); //target 'card number' input element
 const zipCode = document.getElementById('zip'); //Target zip code input element
 const cvv = document.getElementById('cvv'); //target ccv input element
-const cc = paymentSelect.children[2];
-const paypal = paymentSelect.children[3];
-const bitcoin = paymentSelect.children[4];
 
 //Global Vars
 let totalCost = 0; //Initialize variable to hold current $ amount, set to 0
@@ -44,7 +42,6 @@ name.focus();
 /*
 // 'Job Role' Section
 */
-
 otherJobRole.hidden = true; //Hide "Other Job Role" input by default
 
 //Event Listener for tracking changes to 'Job Role' drop-down menu
@@ -188,14 +185,54 @@ function emailValidator() {
   return emailIsValid;
 }
 
+//*************************START WORK AREA****************************//
+/*
+*Prevent users from selecting activities that occur at the same time:
+  *When a user selects an activity, loop over all of the activities
+      *Check if any activities have the same day & time as the activity that was just checked/unchecked
+      *If the matching activity is not the activity that was just checked/unchecked, disable/enable the conflicting activity's checkbox input
+      *add/remove the 'disabled' className to the activity's parent label element
+*/
+
 //Listen for change to checkboxes
 activitiesBox.addEventListener('change', (event) => {
-  //Verify whether a checkbox has been checked
-  if (event.target.checked) {
-    activitiesTotal++;  //if checked, add 1 to activitiesTotal
-  } else {
-    activitiesTotal--; //if unchecked, subtract 1 from activitiesTotal
+  const activitiesBoxChildren = activitiesBox.children;
+  const dateAndTime = event.target.getAttribute('data-day-and-time');
+  const scheduleData = [];
+
+  for(let i = 0; i < activitiesBoxChildren.length; i++) {
+    let parseCheckbox = checkboxInput[i].getAttribute('data-day-and-time'); //
+    scheduleData.push(parseCheckbox);
+    //console.log(parseCheckbox);
+    //console.log(event.target);
+
+    if(event.target.checked) {
+      if(dateAndTime === scheduleData[i]) {
+        console.log('We have a match, folks: ' + scheduleData[i]);
+
+      } else {
+        console.log('There are no matches in position ' + [i]);
+      }
+    }
+
+    //Verify whether a checkbox has been checked
+    //if (event.target.checked) {
+
+      if(dateAndTime === parseCheckbox) { //Check to see if what you clicked is equal to other matching times
+
+      } else if(dateAndTime != parseCheckbox){
+        //console.log('disabling' + parseCheckbox);
+      }
+    //}
   }
+
+  //Verify whether a checkbox has been checked
+if (event.target.checked) {
+  activitiesTotal++;  //if checked, add 1 to activitiesTotal
+} else {
+  activitiesTotal--; //if unchecked, subtract 1 from activitiesTotal
+}
+
 });
 
 //Function to validate activities
@@ -204,6 +241,9 @@ function activitiesValidator() {
   validator(activitiesValid, activitiesBox);
   return activitiesValid;
 }
+
+//*************************END WORK AREA****************************//
+
 
 //Function to validate credit card number criteria
 function creditcardValidator() {
@@ -236,10 +276,8 @@ function validateAllFields() {
   activities.addEventListener('change', activitiesValidator); //activities box
   zipCode.addEventListener('keyup', zipCodeValidator); //zip code field
   cvv.addEventListener('keyup', cvvValidator); //cvv field
-  if(creditCardSelected){
+  if (creditCardSelected) {
     cardNumber.addEventListener('keyup', creditcardValidator); //card number field
-  } else {
-
   }
 }
 
@@ -251,12 +289,12 @@ form.addEventListener('submit', (event) => {
   //event.preventDefault();
 
   if (!nameValidator()) {
-    console.log('Invalid name prevented submission.');
+    console.log('Please enter a valid name.');
     event.preventDefault();
   }
 
   if (!emailValidator()) {
-    console.log('Invalid email prevented submission.');
+    console.log('Please enter a valid email address.');
     event.preventDefault();
   }
 
@@ -289,7 +327,7 @@ form.addEventListener('submit', (event) => {
 // Accessibility
 */
 //Learned syntax from Treehouse 'Input Validation Error Indications' project Warm Up section
-document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => { //Loop over '<input type="checkbox">'
+checkboxInput.forEach(checkbox => { //Loop over '<input type="checkbox">'
   const checkboxParent = checkbox.parentElement; //target the parent element of type checkbox (label)
 
   //Listen for 'focus' event, add class of 'focus' to parent element <label>
