@@ -3,7 +3,7 @@ Project 3 - Interactive Form in JS
 
 An interactive form using vanilla JS. The following list is in order of appearance on the screen:
 
-*FORM INPUT FIELDS*
+###FORM INPUT FIELDS
 1. Name Input
 - The form will start with the focus state on the name <input> element.
 The name input must contain a minimum of one alpha character to validate.
@@ -37,7 +37,7 @@ The "Total: $" will update to reflect current price/cost of all activities selec
 - 'CVV'
     - Allows 3 numeric characters
 
-*VALIDATION INFO*
+###VALIDATION INFO
 The following *(Required) <input> fields are validated only when the <form> element is submitted :
 - name
   - Requires a mininum of 1 (one) alpha character
@@ -47,7 +47,7 @@ The following *(Required) <input> fields are validated only when the <form> elem
   - Requires that the user has selected a minimum of one activity prior to submitting the form
   - The user may only select one activity within a given timeframe (date & time)
 
-*ADDED FEATURES*
+###ADDED FEATURES
 
 Feature 1 - Credit Card Live Validation:
 
@@ -76,4 +76,4 @@ Live-validation for name, email, and activities fields will occur after initial 
 
 Changed CSS colors.
 
-Updated 1/4/2020, by Matt Coale
+Updated 1/6/2020, by Matt Coale
