@@ -1,6 +1,8 @@
-//* Interactive Form*
+//*
+// Interactive Form*
 // FSJS Techdegree Project 3
 // By: Matt Coale
+//*
 
 /*
 // Selectors/Global Vars:
@@ -31,14 +33,12 @@ const cardNumber = document.getElementById('cc-num'); //target 'card number' inp
 const zipCode = document.getElementById('zip'); //Target zip code input element
 const cvv = document.getElementById('cvv'); //target ccv input element
 
-
 //Global Vars
 let totalCost = 0; //Initialize variable to hold current $ amount, set to 0
 let activitiesTotal = 0; //Track amount of activities selected by user
 
-/*
+
 // Set main focus to 'Name' input upon page load
-*/
 name.focus();
 
 /*
@@ -86,7 +86,6 @@ shirtDesign.addEventListener('change', (event) => {
 /*
 // 'Register for Activities' Section
 */
-
 //Event Listener for tracking activities and calculating the total cost
 activities.addEventListener('change', (event) => {
   const clicked = event.target; //store checkbox input that was clicked/selected by the user
@@ -281,7 +280,7 @@ cvv.addEventListener('keyup', cvvValidator);
 cardNumber.addEventListener('keyup', creditcardValidator);
 
 /*
-// Submit Form & run validation
+// Submit Form & validate
 */
 form.addEventListener('submit', (event) => {
 
