@@ -48,7 +48,8 @@ The following *(Required) <input> fields are validated only when the <form> elem
   - The user may only select one activity within a given timeframe (date & time)
 
 ADDED FEATURES
-Feature 1 = - Credit Card Live Validation:
+Feature 1 - Credit Card Live Validation:
+
 The following *(Required) credit card specific <input> fields are validated in real time:
 (Note: Credit Card, Zip Code, and CVV fields only validated when Credit Card is selected)
 - card number
