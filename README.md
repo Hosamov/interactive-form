@@ -66,9 +66,9 @@ The following *(Required) credit card specific <input> fields are validated in r
   - If a user inputs two + '@' symbols prior to the '.com', the .email-hint textContent is changed to:
     - "Please enter a valid Email address:  Email addresses may contain only 1 '@' symbol. Example: username@domain-name.com"
   - If a user forgets to add a '.' (dot) at the end of the address, the .email-hint textContent is changed to:
-    - "Please enter a valid Email address: The domain name must be linked to a Top Level Domain (TLD) Extension (.com, .net, .org...). Example: 'username@domain-name.com'"
+    - "Please enter a valid Email address: The domain name must be linked to a Top Level Domain (TLD) Extension separated by a '.' (.com, .net, .org...). Example: 'username@domain-name.com'"
   - Otherwise, the user is shown the following message:
-    - "Please enter a valid Email address.""
+    - "Please enter a valid Email address.  Example: username@domain-name.com"
 
 
 Live-validation for name, email, and activities fields will occur after initial form is submitted. Hints will not show unless the user did not enter valid information in required input fields. Credit Card validation is live on load.

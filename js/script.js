@@ -143,7 +143,7 @@ paymentSelect.addEventListener('change', (event) => {
 });
 
 /*
-Form Validation
+// Form Validation
 */
 //Handle what to do when validation passes
 function validationPass(element) {
@@ -159,8 +159,8 @@ function validationFail(element) {
   element.parentElement.lastElementChild.style.display = 'inline'; //Display accessibility hint to user
 }
 
-//Validator function to test elements validity
-//function called when <form> submit button is pressed
+/*Validator function to test elements validity
+function called when <form> submit button is triggered*/
 function validator(isValid, element) {
   if (isValid) {
     validationPass(element);
@@ -171,7 +171,7 @@ function validator(isValid, element) {
   }
 }
 
-//Function to validate the name
+//Function to validate name <input> value:
 function nameValidator() {
   const nameValue = name.value;
   const nameIsValid = /^[a-zA-Z]+ ?[a-zA-Z]*? ?[a-zA-Z]*?$/.test(nameValue);
@@ -179,20 +179,22 @@ function nameValidator() {
   return nameIsValid;
 }
 
-//Function to validate the email address
+//Function to validate the email <input> value:
 function emailValidator() {
   const emailValue = email.value;
   const emailIsValid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(emailValue); //regex to check if the email is a valid format
   const regexCheckAt = /^\w*[@]+\w*@+\w*[@.]*\w*\.[a-z]+$/i.test(emailValue); //regex to check if there are more than 1 '@' symbols
   const regexCheckDot = /^[^@]+@[^@.]+[^\.][a-z]+$/i.test(emailValue); //regex to check if '.' exists
 
-  if(regexCheckAt) {
+  //Test certain conditions to determine if further user clarification is necessary:
+  if(regexCheckAt) { //Check to see if there are more than 1 '@' symbols, if so, inform the user how to correct the error...
     emailHint.textContent = "Please enter a valid Email address:  Email addresses may contain only 1 '@' symbol. Example: username@domain-name.com";
-  } else if(regexCheckDot) {
-    emailHint.textContent = "Please enter a valid Email address: The domain name must be linked to a Top Level Domain (TLD) Extension (.com, .net, .org...). Example: 'username@domain-name.com'";
-  } else {
-    emailHint.textContent = "Please enter a valid Email address.";
+  } else if(regexCheckDot) { //Check to see if the user included the '.' in the proper place, if not, inform the the user how to correct the error...
+    emailHint.textContent = "Please enter a valid Email address: The domain name must be linked to a Top Level Domain (TLD) Extension separated by a '.' (.com, .net, .org...). Example: 'username@domain-name.com'";
+  } else { //otherwise, show a generic validation message...
+    emailHint.textContent = "Please enter a valid Email address. Example: username@domain-name.com";
   }
+
   validator(emailIsValid, email);
   return emailIsValid;
 }
@@ -202,33 +204,29 @@ activitiesBox.addEventListener('change', (event) => {
   const eventTarget = event.target;
   let isChecked = eventTarget.checked;
   const selectedActivity = eventTarget.getAttribute('data-day-and-time'); //target data-day-and-time attribute inside the <input> element
-
-  const scheduleData = [];
-  let selectedData = '';
+  const scheduleData = []; //Declare empty array to hold values from 'parseCheckbox' (defined below) for comparrison
 
   //Verify whether a checkbox has been checked
   if (isChecked) {
-    //selectedData = eventTarget; //Store eventTarget to selectedData
-    activitiesTotal++; //if checked, add 1 to activitiesTotal
+    activitiesTotal++; //if checked, add 1 to activitiesTotal (for validator use)
   } else {
     activitiesTotal--; //if unchecked, subtract 1 from activitiesTotal
   }
 
   for (let i = 0; i < activitiesBoxChildren.length; i++) {
-    let parseCheckbox = checkboxInput[i].getAttribute('data-day-and-time'); //Target all checkbox with 'data-date-and-time' attrib. so we can use the data
+    const parseCheckbox = checkboxInput[i].getAttribute('data-day-and-time'); //Target all checkbox with 'data-date-and-time' attrib. so we can use the data
     scheduleData.push(parseCheckbox); //Push parseCheckbox data to the array, 'scheduleData'
 
     if (isChecked) {
       if (scheduleData[i] === selectedActivity) {
         activitiesBoxChildren[i].classList.add('disabled'); //add 'disabled' className to all children of the 'activities-box' that match targeted checkbox
         eventTarget.parentElement.classList.remove('disabled'); //Remove the 'disabled' className from the targeted checkbox only to keep it active
-        //disable all checkboxes that have the class of 'disabled'
-        if (activitiesBoxChildren[i].className == 'disabled') {
-          checkboxInput[i].disabled = true;
+        if (activitiesBoxChildren[i].className === 'disabled') {
+          checkboxInput[i].disabled = true; //disable all checkboxes that have the className of 'disabled'
         }
       }
     } else {
-      //If the event target is not checked, remove 'disabled' class and enable the disabled button
+      //If the event target is not checked, remove 'disabled' class and reenable the disabled button
       activitiesBoxChildren[i].classList.remove('disabled');
       checkboxInput[i].disabled = false;
     }
@@ -243,7 +241,8 @@ function activitiesValidator() {
   return activitiesValid;
 }
 
-//Function to validate credit card number criteria
+/*Function to validate credit card number criteria
+Credit card <input> values are validated in real-time (see below)*/
 function creditcardValidator() {
   const cardValue = cardNumber.value;
   const cardIsValid = /^\d{13,16}?$/.test(cardValue); //check for a number with 13-16 characters
@@ -251,7 +250,8 @@ function creditcardValidator() {
   return cardIsValid;
 }
 
-//Function to validate required zip code
+/*Function to validate required zip code
+Credit card <input> values are validated in real-time (see below)*/
 function zipCodeValidator() {
   const zipValue = zipCode.value;
   const zipIsValid = /^\d{5}$/.test(zipValue); //test for 5 numbers
@@ -259,7 +259,8 @@ function zipCodeValidator() {
   return zipIsValid;
 }
 
-//Function to validate required CVV number
+/*Function to validate required CVV number
+Credit card <input> values are validated in real-time (see below)*/
 function cvvValidator() {
   const cvvValue = cvv.value;
   const cvvIsValid = /^\d{3}$/.test(cvvValue); //test for 3 numbers
@@ -269,18 +270,18 @@ function cvvValidator() {
 
 //Validate All Fields (Except those outside the function, which validate in real-time prior to <form> submit)
 function validateAllFields() {
-  name.addEventListener('keyup', nameValidator); //Name field
-  email.addEventListener('keyup', emailValidator); //email field
+  name.addEventListener('keyup', nameValidator);
+  email.addEventListener('keyup', emailValidator);
   activities.addEventListener('change', activitiesValidator); //activities box
 }
 
-//Real Time Validation for Credit Card:
-zipCode.addEventListener('keyup', zipCodeValidator); //zip code field
-cvv.addEventListener('keyup', cvvValidator); //cvv field
-cardNumber.addEventListener('keyup', creditcardValidator); //card number field
+//Real Time Validation for Credit Card <input> values:
+zipCode.addEventListener('keyup', zipCodeValidator);
+cvv.addEventListener('keyup', cvvValidator);
+cardNumber.addEventListener('keyup', creditcardValidator);
 
 /*
-Submit Form & validate
+// Submit Form & run validation
 */
 form.addEventListener('submit', (event) => {
 
@@ -314,8 +315,6 @@ form.addEventListener('submit', (event) => {
     }
 
   }
-
-  console.log('Submit handler is functional!');
 
 });
 
