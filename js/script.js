@@ -5,11 +5,11 @@
 /*
 // Selectors/Global Vars:
 */
-
 //Form,Name, email, and job role selectors
 const form = document.querySelector('form');
 const name = document.getElementById('name'); //Select 'Name' input
 const email = document.getElementById('email'); //Select 'email' input
+const emailHint = document.querySelector('.email-hint');//select '.email-hint'
 const otherJobRole = document.getElementById('other-job-role'); //target 'other job role' input element
 const userTitle = document.getElementById('title'); //target 'job role' input element
 
@@ -21,6 +21,7 @@ const shirtColorSelect = document.getElementById('color'); //target t-shirt colo
 const activities = document.getElementById('activities'); //target 'Register for Activities'
 const activitiesCost = document.getElementById('activities-cost'); //target 'Total: $'
 const activitiesBox = document.getElementById('activities-box');
+const activitiesBoxChildren = activitiesBox.children;
 const checkboxInput = document.querySelectorAll('input[type="checkbox"]');
 
 //Payment Type Selectors
@@ -29,6 +30,7 @@ const paymentSelect = document.getElementById('payment'); //target 'Payment Info
 const cardNumber = document.getElementById('cc-num'); //target 'card number' input element
 const zipCode = document.getElementById('zip'); //Target zip code input element
 const cvv = document.getElementById('cvv'); //target ccv input element
+
 
 //Global Vars
 let totalCost = 0; //Initialize variable to hold current $ amount, set to 0
@@ -180,58 +182,57 @@ function nameValidator() {
 //Function to validate the email address
 function emailValidator() {
   const emailValue = email.value;
-  const emailIsValid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(emailValue);
+  const emailIsValid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(emailValue); //regex to check if the email is a valid format
+  const regexCheckAt = /^\w*[@]+\w*@+\w*[@.]*\w*\.[a-z]+$/i.test(emailValue); //regex to check if there are more than 1 '@' symbols
+  const regexCheckDot = /^[^@]+@[^@.]+[^\.][a-z]+$/i.test(emailValue); //regex to check if '.' exists
+
+  if(regexCheckAt) {
+    emailHint.textContent = "Please enter a valid Email address:  Email addresses may contain only 1 '@' symbol. Example: username@domain-name.com";
+  } else if(regexCheckDot) {
+    emailHint.textContent = "Please enter a valid Email address: The domain name must be linked to a Top Level Domain (TLD) Extension (.com, .net, .org...). Example: 'username@domain-name.com'";
+  } else {
+    emailHint.textContent = "Please enter a valid Email address.";
+  }
   validator(emailIsValid, email);
   return emailIsValid;
 }
 
-//*************************START WORK AREA****************************//
-/*
-*Prevent users from selecting activities that occur at the same time:
-  *When a user selects an activity, loop over all of the activities
-      *Check if any activities have the same day & time as the activity that was just checked/unchecked
-      *If the matching activity is not the activity that was just checked/unchecked, disable/enable the conflicting activity's checkbox input
-      *add/remove the 'disabled' className to the activity's parent label element
-*/
-
 //Listen for change to checkboxes
 activitiesBox.addEventListener('change', (event) => {
-  const activitiesBoxChildren = activitiesBox.children;
-  const dateAndTime = event.target.getAttribute('data-day-and-time');
+  const eventTarget = event.target;
+  let isChecked = eventTarget.checked;
+  const selectedActivity = eventTarget.getAttribute('data-day-and-time'); //target data-day-and-time attribute inside the <input> element
+
   const scheduleData = [];
-
-  for(let i = 0; i < activitiesBoxChildren.length; i++) {
-    let parseCheckbox = checkboxInput[i].getAttribute('data-day-and-time'); //
-    scheduleData.push(parseCheckbox);
-    //console.log(parseCheckbox);
-    //console.log(event.target);
-
-    if(event.target.checked) {
-      if(dateAndTime === scheduleData[i]) {
-        console.log('We have a match, folks: ' + scheduleData[i]);
-
-      } else {
-        console.log('There are no matches in position ' + [i]);
-      }
-    }
-
-    //Verify whether a checkbox has been checked
-    //if (event.target.checked) {
-
-      if(dateAndTime === parseCheckbox) { //Check to see if what you clicked is equal to other matching times
-
-      } else if(dateAndTime != parseCheckbox){
-        //console.log('disabling' + parseCheckbox);
-      }
-    //}
-  }
+  let selectedData = '';
 
   //Verify whether a checkbox has been checked
-if (event.target.checked) {
-  activitiesTotal++;  //if checked, add 1 to activitiesTotal
-} else {
-  activitiesTotal--; //if unchecked, subtract 1 from activitiesTotal
-}
+  if (isChecked) {
+    //selectedData = eventTarget; //Store eventTarget to selectedData
+    activitiesTotal++; //if checked, add 1 to activitiesTotal
+  } else {
+    activitiesTotal--; //if unchecked, subtract 1 from activitiesTotal
+  }
+
+  for (let i = 0; i < activitiesBoxChildren.length; i++) {
+    let parseCheckbox = checkboxInput[i].getAttribute('data-day-and-time'); //Target all checkbox with 'data-date-and-time' attrib. so we can use the data
+    scheduleData.push(parseCheckbox); //Push parseCheckbox data to the array, 'scheduleData'
+
+    if (isChecked) {
+      if (scheduleData[i] === selectedActivity) {
+        activitiesBoxChildren[i].classList.add('disabled'); //add 'disabled' className to all children of the 'activities-box' that match targeted checkbox
+        eventTarget.parentElement.classList.remove('disabled'); //Remove the 'disabled' className from the targeted checkbox only to keep it active
+        //disable all checkboxes that have the class of 'disabled'
+        if (activitiesBoxChildren[i].className == 'disabled') {
+          checkboxInput[i].disabled = true;
+        }
+      }
+    } else {
+      //If the event target is not checked, remove 'disabled' class and enable the disabled button
+      activitiesBoxChildren[i].classList.remove('disabled');
+      checkboxInput[i].disabled = false;
+    }
+  }
 
 });
 
@@ -241,9 +242,6 @@ function activitiesValidator() {
   validator(activitiesValid, activitiesBox);
   return activitiesValid;
 }
-
-//*************************END WORK AREA****************************//
-
 
 //Function to validate credit card number criteria
 function creditcardValidator() {
@@ -269,24 +267,22 @@ function cvvValidator() {
   return cvvIsValid;
 }
 
-//Real-time validation
+//Validate All Fields (Except those outside the function, which validate in real-time prior to <form> submit)
 function validateAllFields() {
   name.addEventListener('keyup', nameValidator); //Name field
   email.addEventListener('keyup', emailValidator); //email field
   activities.addEventListener('change', activitiesValidator); //activities box
-  zipCode.addEventListener('keyup', zipCodeValidator); //zip code field
-  cvv.addEventListener('keyup', cvvValidator); //cvv field
-  if (creditCardSelected) {
-    cardNumber.addEventListener('keyup', creditcardValidator); //card number field
-  }
 }
+
+//Real Time Validation for Credit Card:
+zipCode.addEventListener('keyup', zipCodeValidator); //zip code field
+cvv.addEventListener('keyup', cvvValidator); //cvv field
+cardNumber.addEventListener('keyup', creditcardValidator); //card number field
 
 /*
 Submit Form & validate
 */
 form.addEventListener('submit', (event) => {
-
-  //event.preventDefault();
 
   if (!nameValidator()) {
     console.log('Please enter a valid name.');

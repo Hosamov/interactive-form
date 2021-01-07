@@ -3,6 +3,7 @@ Project 3 - Interactive Form in JS
 
 An interactive form using vanilla JS. The following list is in order of appearance on the screen:
 
+FORM INPUT FIELDS
 1. Name Input
 - The form will start with the focus state on the name <input> element.
 The name input must contain a minimum of one alpha character to validate.
@@ -36,15 +37,39 @@ The "Total: $" will update to reflect current price/cost of all activities selec
 - 'CVV'
     - Allows 3 numeric characters
 
-The following *(Required) <input> fields are validated (Note: Credit Card, Zip Code, and CVV fields only validated when Credit Card is selected):
+VALIDATION INFO
+The following *(Required) <input> fields are validated only when the <form> element is submitted :
 - name
+  - Requires a mininum of 1 (one) alpha character
 - email
+  - Required syntax: [min 1 character + @ + min 1 character + . + 3x alpha characters]
 - activities (Register for Activities)
-- card number
-- zip code
-- cvv
+  - Requires that the user has selected a minimum of one activity prior to submitting the form
+  - The user may only select one activity within a given timeframe (date & time)
 
-Live-validation will occur after for submitted. Hints will not show unless the user did not enter valid information in required input fields.
+ADDED FEATURES
+Feature 1 = - Credit Card Live Validation:
+The following *(Required) credit card specific <input> fields are validated in real time:
+(Note: Credit Card, Zip Code, and CVV fields only validated when Credit Card is selected)
+- card number
+  - Validated to ensure 13-16 numeric characters have been inputted into the Card Number* field
+- zip code
+  - Validate to ensure a minimum of 5 numeric characters have been inputted into the Zip Code* field
+- cvv
+  - Validate to ensure a minimum of 3 numeric characters have been inputted into the CVV* field
+
+Feature 2 - Conditional Error Messages for Email <input>:
+- The emailValidator() function test whether the email is valid in the following ways:
+  - Overall, the function tests to ensure the email contains alphanumerictext@text.text
+  - If a user inputs two + '@' symbols prior to the '.com', the .email-hint textContent is changed to:
+    - "Please enter a valid Email address:  Email addresses may contain only 1 '@' symbol. Example: username@domain-name.com"
+  - If a user forgets to add a '.' (dot) at the end of the address, the .email-hint textContent is changed to:
+    - "Please enter a valid Email address: The domain name must be linked to a Top Level Domain (TLD) Extension (.com, .net, .org...). Example: 'username@domain-name.com'"
+  - Otherwise, the user is shown the following message:
+    - "Please enter a valid Email address.""
+
+
+Live-validation for name, email, and activities fields will occur after initial form is submitted. Hints will not show unless the user did not enter valid information in required input fields. Credit Card validation is live on load.
 
 
 Changed CSS colors.
