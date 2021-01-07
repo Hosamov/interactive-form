@@ -49,7 +49,7 @@ The following *(Required) <input> fields are validated only when the <form> elem
 
 ### ADDED FEATURES
 
-Feature 1 - Credit Card Live Validation:
+##### Feature 1 - Credit Card Live Validation:
 
 The following *(Required) credit card specific <input> fields are validated in real time:
 (Note: Credit Card, Zip Code, and CVV fields only validated when Credit Card is selected)
@@ -60,7 +60,7 @@ The following *(Required) credit card specific <input> fields are validated in r
 - cvv
   - Validate to ensure a minimum of 3 numeric characters have been inputted into the CVV* field
 
-Feature 2 - Conditional Error Messages for Email <input>:
+##### Feature 2 - Conditional Error Messages for Email <input>:
 - The emailValidator() function test whether the email is valid in the following ways:
   - Overall, the function tests to ensure the email contains alphanumerictext@text.text
   - If a user inputs two + '@' symbols prior to the '.com', the .email-hint textContent is changed to:
@@ -73,7 +73,8 @@ Feature 2 - Conditional Error Messages for Email <input>:
 
 Live-validation for name, email, and activities fields will occur after initial form is submitted. Hints will not show unless the user did not enter valid information in required input fields. Credit Card validation is live on load.
 
+### ADITIONAL NOTES:
+- Adjusted/edited CSS color pallet.
 
-Changed CSS colors.
 
-Updated 1/6/2020, by Matt Coale
+Last Updated 1/7/2020, by Matt Coale
